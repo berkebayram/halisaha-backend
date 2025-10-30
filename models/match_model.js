@@ -21,9 +21,8 @@ const pitfallSchema = new mongoose.Schema({
 const matchPositionSchema = new mongoose.Schema({
     playerId: {
         type: String,
-        required: true,
     },
-    positionid: {
+    positionId: {
         type: Number,
         required: true,
     },
