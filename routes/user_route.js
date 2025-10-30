@@ -1,0 +1,19 @@
+const express = require('express');
+const { createUser, getMe } = require('../controllers/user_controller');
+const { validateBody, validateAuth } = require('../middlewares');
+const { createUserValidator, loginUserValidator } = require('../validators/user_validator');
+const { handleLogin, handleRefresh } = require('../controllers/auth_controller');
+
+const getUserRouter = () => {
+    const userRouter = express.Router()
+    userRouter.post("/register", validateBody(createUserValidator), createUser);
+    userRouter.post("/login", validateBody(loginUserValidator), handleLogin);
+    userRouter.get("/refresh", validateBody(loginUserValidator), handleRefresh);
+    userRouter.get("/me", validateAuth(), getMe);
+    return userRouter;
+}
+
+module.exports = {
+    getUserRouter
+}
+
