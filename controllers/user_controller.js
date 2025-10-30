@@ -1,4 +1,4 @@
-const { hashRound } = require("../config");
+const { hashRound, authSecret, refreshSecret } = require("../config");
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
