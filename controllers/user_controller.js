@@ -6,9 +6,11 @@ const createUser = async (req, res) => {
     try {
         const { email, name, password } = req.body;
         const passHash = bcrypt.hashSync(password, hashRound);
-        await User.create({ email, name, passHash });
+        const created = await User.create({ email, name, passHash });
 
-        return res.status(200).json({ message: "Success" });
+        const auth = jwt.sign({ id: created._id.toString() }, authSecret, { expiresIn: '1h' });
+        const refresh = jwt.sign({ id: created._id.toString() }, refreshSecret, { expiresIn: '7d' });
+        return res.status(200).json({ auth, refresh });
     }
     catch (err) {
         return res.status(400).json({ message: err.message });
