@@ -1,6 +1,7 @@
 const { hashRound } = require("../config");
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
 const createUser = async (req, res) => {
     try {
