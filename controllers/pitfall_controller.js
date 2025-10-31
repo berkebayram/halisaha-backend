@@ -9,14 +9,24 @@ const findOrCreatePitfall = async (name, long, lat) => {
                 coordinates: [long, lat]
             }
         });
-        if (!found)
-            found = await Pitfall.create({
+        if (!found) {
+            const coordinates = []
+            coordinates.push(long);
+            coordinates.push(lat);
+
+            const newPitfall = new Pitfall({
                 name: name,
                 location: {
-                    type: "Point",
-                    coordinates: [long, lat]
+                    type: 'Point',
+                    coordinates: coordinates
                 }
-            })
+            });
+
+            // 2. Save the new document to the database
+            const savedPitfall = await newPitfall.save();
+            return savedPitfall;
+
+        }
         return found;
     }
     catch (err) {
