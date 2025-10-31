@@ -29,7 +29,7 @@ const getMatchRouter = () => {
         validateAuth(),
         displayMatch);
 
-    matchRoute.get("/match/all",
+    matchRouter.get("/match/all",
         validateAuth(),
         getAllMatches);
 
