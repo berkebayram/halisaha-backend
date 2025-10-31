@@ -4,6 +4,8 @@ const config = require('./config');
 const connectDB = require('./db');
 const { getUserRouter } = require('./routes/user_route');
 const { getMatchRouter } = require('./routes/match_route');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-output.json');
 
 
 const startApp = async () => {
@@ -14,6 +16,8 @@ const startApp = async () => {
     const app = express();
     app.use(cors());
     app.use(express.json());
+
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     app.use(getUserRouter());
     app.use(getMatchRouter());
