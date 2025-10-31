@@ -47,7 +47,6 @@ const getBusyMatchHours = async (req, res) => {
             var match = matchesOnDate[i];
             res.push(match.matchHour);
         }
-
         return res.status(200).json({ busyHours: res });
     }
     catch (err) {
@@ -64,20 +63,16 @@ const inviteOrAssignPosition = async (req, res) => {
             assignSelf
         } = req.body;
         const { userId } = req.body;
-
         var match = await Match.findById(matchId);
         if (!match)
             return res.status(404).json({ message: "Given match not found" });
-
         if (match.creator != userId)
             return res.status(401).json({ message: "Unauthorized Request" });
-
         for (var pos of match.positions) {
             if (pos.positionId != positionId)
                 continue;
             if (pos.playerId != null || pos.playerId !== "")
                 return res.status(400).json({ message: "Position is already taken" })
-
             if (assignSelf) {
                 pos.playerId = userId;
                 await match.save();
@@ -105,19 +100,15 @@ const kickPlayer = async (req, res) => {
         var match = await Match.findById(matchId);
         if (!match)
             return res.status(404).json({ message: "Given match not found" });
-
         if (match.creator != userId)
             return res.status(401).json({ message: "Unauthorized Request" });
-
         for (var pos of match.positions) {
             if (pos.positionId != positionId)
                 continue;
             if (pos.playerId == null || pos.playerId === "")
                 return res.status(400).json({ message: "Bad Request" });
-
             if (pos.playerId == userId)
                 return res.status(400).json({ message: "Bad Request" });
-
             pos.playerId = "";
             await match.save();
             return res.status(200).json({ _id: null, ...match.toJSON() });
@@ -132,7 +123,7 @@ const kickPlayer = async (req, res) => {
 const displayMatch = async (req, res) => {
     try {
         const { userId } = req;
-        const { matchId } = req.body;
+        const { matchId } = req.params;
         const match = await Match.findById(matchId);
         if (!match)
             return res.status(404).json({ message: "Match Not Found" });
@@ -159,31 +150,24 @@ const interactMatchLink = async (req, res) => {
             linkId,
             isAccepted,
         } = req.body;
-
         var link = await MatchLinker.findById(linkId);
         if (!link)
             return res.status(400).json({ message: "Bad Request" });
         if (link.used)
             return res.status(400).json({ message: "Link already used" });
-
         link.used = true;
         if (!isAccepted) {
             await link.save();
             return res.status(200).message({ message: "Success" });
         }
-
-
-
         const match = await Match.findById(link.matchId);
         for (var pos of match.positions) {
             if (pos.positionId != link.positionId)
                 continue;
-
             if (pos.playerId != null && pos.playerId !== userId)
                 return res.status(400).json({ message: "Position is already filled" });
             pos.playerId = userId;
         }
-
         await link.save();
         await match.save();
         return res.status(200).json({ _id: null, ...match.toJSON() });

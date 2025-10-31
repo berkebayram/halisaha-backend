@@ -1,9 +1,42 @@
 const express = require('express');
-const { validateAuth } = require('../middlewares');
-const { getBusyMatchHours, createMatch } = require('../controllers/match_controller');
+const { validateAuth, validateBody } = require('../middlewares');
+const { getBusyMatchHours, createMatch, inviteOrAssignPosition, kickPlayer, displayMatch, interactMatchLink } = require('../controllers/match_controller');
+const { inviteOrAssignPositionValidator, createMatchValidator, kickPlayerValidator, interactMatchLinkValidator } = require('../validators/match_validator');
 
 const getMatchRouter = () => {
     const matchRouter = express.Router();
-    matchRouter.get("/match/available", validateAuth(), getBusyMatchHours);
-    matchRouter.post("/match/create", validateAuth(), createMatch)
+
+    matchRouter.get("/match/available",
+        validateAuth(),
+        getBusyMatchHours);
+
+    matchRouter.post("/match/create",
+        validateAuth(),
+        validateBody(createMatchValidator),
+        createMatch);
+
+    matchRouter.put("/match/invite",
+        validateAuth(),
+        validateBody(inviteOrAssignPositionValidator),
+        inviteOrAssignPosition);
+
+    matchRouter.delete("/match/player",
+        validateAuth(),
+        validateBody(kickPlayerValidator),
+        kickPlayer);
+
+    matchRouter.get("/match",
+        validateAuth(),
+        displayMatch);
+
+    matchRouter.post("/match/link",
+        validateAuth(),
+        validateBody(interactMatchLinkValidator),
+        interactMatchLink);
+
+    return matchRouter;
+}
+
+module.exports = {
+    getMatchRouter
 }
