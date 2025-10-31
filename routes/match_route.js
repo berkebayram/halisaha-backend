@@ -1,6 +1,6 @@
 const express = require('express');
 const { validateAuth, validateBody } = require('../middlewares');
-const { getBusyMatchHours, createMatch, inviteOrAssignPosition, kickPlayer, displayMatch, interactMatchLink } = require('../controllers/match_controller');
+const { getBusyMatchHours, createMatch, inviteOrAssignPosition, kickPlayer, displayMatch, interactMatchLink, getAllMatches } = require('../controllers/match_controller');
 const { inviteOrAssignPositionValidator, createMatchValidator, kickPlayerValidator, interactMatchLinkValidator } = require('../validators/match_validator');
 
 const getMatchRouter = () => {
@@ -28,6 +28,10 @@ const getMatchRouter = () => {
     matchRouter.get("/match",
         validateAuth(),
         displayMatch);
+
+    matchRoute.get("/match/all",
+        validateAuth(),
+        getAllMatches);
 
     matchRouter.post("/match/link",
         validateAuth(),

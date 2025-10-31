@@ -24,8 +24,7 @@ const createMatch = async (req, res) => {
             isPublic,
         });
         return res.status(200).json({
-            _id: null,
-            ...createdMatch.toJSON()
+            created: createdMatch.toJSON()
         });
     }
     catch (err) {
@@ -48,6 +47,28 @@ const getBusyMatchHours = async (req, res) => {
             res.push(match.matchHour);
         }
         return res.status(200).json({ busyHours: res });
+    }
+    catch (err) {
+        console.log(`Err on match available hours : ${err.message}`);
+        return res.status(400).json({ message: "Bad Request" });
+    }
+}
+
+const getAllMatches = async (req, res) => {
+    try {
+        const { userId } = req;
+        const matches = await Match.find({
+            matchDate: { $gt: now },
+            or: [
+                { creator: targetPlayerId },
+                { 'positions.playerId': targetPlayerId }
+            ]
+        });
+        const result = [];
+        for (let match of matches) {
+            result.push(match.toJSON());
+        }
+        return res.status(200).json({ result });
     }
     catch (err) {
         console.log(`Err on match available hours : ${err.message}`);
@@ -185,4 +206,5 @@ module.exports = {
     kickPlayer,
     displayMatch,
     interactMatchLink,
+    getAllMatches,
 }
