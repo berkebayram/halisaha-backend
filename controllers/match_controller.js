@@ -8,6 +8,7 @@ const createMatch = async (req, res) => {
         const pitfall = await findOrCreatePitfall(pitfallName, long, lat);
         const hasMatch = await Match.findOne({
             pitfallId: pitfall._id,
+            matchDate,
             matchHour
         });
         if (hasMatch)
@@ -58,13 +59,10 @@ const getAllMatches = async (req, res) => {
     try {
         const { userId } = req;
         const matches = await Match.find({
-            matchDate: { $gt: now },
-            or: [
-                { creator: targetPlayerId },
-                { 'positions.playerId': targetPlayerId }
-            ]
+            creator: userId,
         });
         const result = [];
+        console.log(matches.length)
         for (let match of matches) {
             result.push(match.toJSON());
         }
