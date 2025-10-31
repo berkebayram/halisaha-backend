@@ -34,8 +34,7 @@ const validateAuth = () => (req, res, next) => {
 };
 
 const validateRefreshToken = () => (req, res, next) => {
-    const refHeader = req.headers['Refresh'];
-
+    const refHeader = req.headers['refresh'];
     if (!refHeader) {
         return res.status(401).json({ message: 'Refresh header missing' });
     }

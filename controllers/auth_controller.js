@@ -24,9 +24,9 @@ const handleLogin = async (req, res) => {
 
 const handleRefresh = async (req, res) => {
     try {
-        const { userId } = req.body;
-        const auth = jwt.sign(userId, authSecret, { expiresIn: '1h' });
-        const refresh = jwt.sign({ userId }, refreshSecret, { expiresIn: '7d' });
+        const { userId } = req;
+        const auth = jwt.sign({ id: userId }, authSecret, { expiresIn: '1h' });
+        const refresh = jwt.sign({ id: userId }, refreshSecret, { expiresIn: '7d' });
         return res.status(200).json({ auth, refresh })
     }
     catch {
