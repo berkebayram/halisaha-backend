@@ -76,7 +76,13 @@ const getUserInfo = async (req, res) => {
         if (!found)
             return res.status(404).json({ message: "User Not Found" });
 
-        return res.status(200).json(found.toJSON());
+        return res.status(200).json(
+            {
+                _id: null,
+                passHash: null,
+                ...found.toJSON()
+            }
+        );
     }
     catch (err) {
         return res.status(500).json({ message: err.message });

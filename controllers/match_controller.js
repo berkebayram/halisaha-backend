@@ -199,13 +199,12 @@ const interactMatchLink = async (req, res) => {
 
 const getMatchInfo = async (req, res) => {
     try {
-        const { pitfallId } = req.params;
-
+        const pitfallId = req.params.pitfallId ?? req.query.pitfallId ?? req.query.pitfallId;
         const found = await Pitfall.findById(pitfallId);
         if (!found)
             return res.status(404).json({ message: "Pitfall Not Found" });
 
-        return res.status(200).json(found.toJSON());
+        return res.status(200).json({ _id: null, ...found.toJSON() });
     }
     catch (err) {
         console.log(`Err on match kick: ${err.message}`);
