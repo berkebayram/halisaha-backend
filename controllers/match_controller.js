@@ -81,12 +81,12 @@ const inviteOrAssignPosition = async (req, res) => {
             positionId, // 0 - 11 
             assignSelf // true - false
         } = req.body;
-        const { userId } = req.body;
+        const { userId } = req;
         var match = await Match.findById(matchId);
         if (!match)
             return res.status(404).json({ message: "Given match not found" });
         if (match.creator != userId)
-            return res.status(401).json({ message: "Unauthorized Request" });
+            return res.status(402).json({ message: "Unauthorized Request" });
         const wantedPos = match.positions.find(x => x.positionId == positionId);
         if (wantedPos.playerId != null && wantedPos.playerId !== "")
             return res.status(400).json({ message: "Position is filled already" });
