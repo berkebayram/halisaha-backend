@@ -197,9 +197,10 @@ const interactMatchLink = async (req, res) => {
     }
 }
 
-const getMatchInfo = async (req, res) => {
+const getPitfallInfo = async (req, res) => {
     try {
-        const pitfallId = req.params.pitfallId ?? req.query.pitfallId ?? req.query.pitfallId;
+        const pitfallId = req.params.pitfallId ?? req.query.pitfallId ?? req.query.PitfallId;
+        console.log("PitfallId : " + pitfallId);
         const found = await Pitfall.findById(pitfallId);
         if (!found)
             return res.status(404).json({ message: "Pitfall Not Found" });
@@ -220,5 +221,5 @@ module.exports = {
     displayMatch,
     interactMatchLink,
     getAllMatches,
-    getMatchInfo,
+    getMatchInfo: getPitfallInfo,
 }
