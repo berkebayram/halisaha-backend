@@ -80,6 +80,7 @@ const getUserInfo = async (req, res) => {
             {
                 _id: null,
                 passHash: null,
+                id: found._id,
                 ...found.toJSON()
             }
         );
