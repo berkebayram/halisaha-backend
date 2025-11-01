@@ -68,7 +68,7 @@ const changePassword = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.params.userId ?? req.query.userId ?? req.query.UserId;
         if (!userId)
             return res.status(400).json({ message: "UserId not given" });
 

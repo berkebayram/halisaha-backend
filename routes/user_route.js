@@ -17,4 +17,3 @@ const getUserRouter = () => {
 module.exports = {
     getUserRouter
 }
-
