@@ -66,8 +66,26 @@ const changePassword = async (req, res) => {
     }
 }
 
+const getUserInfo = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        if (!userId)
+            return res.status(400).json({ message: "UserId not given" });
+
+        const found = await User.findById(userId);
+        if (!found)
+            return res.status(404).json({ message: "User Not Found" });
+
+        return res.status(200).json(found.toJSON());
+    }
+    catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
+}
+
 module.exports = {
     createUser,
     updateUser,
     getMe,
+    getUserInfo,
 }

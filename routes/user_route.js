@@ -10,6 +10,7 @@ const getUserRouter = () => {
     userRouter.post("/login", validateBody(loginUserValidator), handleLogin);
     userRouter.get("/refresh", validateRefreshToken(), handleRefresh);
     userRouter.get("/me", validateAuth(), getMe);
+    userRouter.get("/info", getUserInfo);
     return userRouter;
 }
 
