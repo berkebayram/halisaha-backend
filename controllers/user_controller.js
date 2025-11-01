@@ -40,7 +40,7 @@ const getMe = async (req, res) => {
     const details = await User.findById(userId);
     if (details == null)
         return res.status(404).json({ message: "Not Found" });
-    return res.status(200).json({ email: details.email, name: details.name });
+    return res.status(200).json({ id: details._id, email: details.email, name: details.name });
 }
 
 const changePassword = async (req, res) => {

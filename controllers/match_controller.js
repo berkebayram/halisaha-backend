@@ -77,9 +77,9 @@ const getAllMatches = async (req, res) => {
 const inviteOrAssignPosition = async (req, res) => {
     try {
         const {
-            matchId,
-            positionId,
-            assignSelf
+            matchId, // string
+            positionId, // 0 - 11 
+            assignSelf // true - false
         } = req.body;
         const { userId } = req.body;
         var match = await Match.findById(matchId);
@@ -87,23 +87,24 @@ const inviteOrAssignPosition = async (req, res) => {
             return res.status(404).json({ message: "Given match not found" });
         if (match.creator != userId)
             return res.status(401).json({ message: "Unauthorized Request" });
-        for (var pos of match.positions) {
-            if (pos.positionId != positionId)
-                continue;
-            if (pos.playerId != null || pos.playerId !== "")
-                return res.status(400).json({ message: "Position is already taken" })
-            if (assignSelf) {
-                pos.playerId = userId;
-                await match.save();
-                return res.status(200).json({
-                    _id: null,
-                    ...match.toJSON()
-                });
-            }
-            else {
-                const linker = await MatchLinker.create({ matchId: match._id.toString(), positionId: positionId });
-                return res.status(200).json({ linker });
-            }
+        const wantedPos = match.positions.find(x => x.positionId == positionId);
+        if (wantedPos.playerId != null && wantedPos.playerId !== "")
+            return res.status(400).json({ message: "Position is filled already" });
+        if (assignSelf) {
+            const already = match.positions.find(x => x.playerId == userId);
+            if (already != null)
+                already.playerId = "";
+            wantedPos.playerId = userId;
+            await match.save();
+            return res.status(200).json(match.toJSON());
+        }
+        else {
+            const link = await MatchLinker.create({
+                positionId,
+                matchId,
+                used: false,
+            });
+            return res.status(200).json({ linkId: link._id });
         }
     }
     catch (err) {
