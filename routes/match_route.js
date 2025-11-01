@@ -38,7 +38,7 @@ const getMatchRouter = () => {
         validateBody(interactMatchLinkValidator),
         interactMatchLink);
 
-    matchRouter.get("/match/info", getMatchInfo);
+    matchRouter.get("/pitfall/info", getMatchInfo);
 
     return matchRouter;
 }
