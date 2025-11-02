@@ -103,7 +103,7 @@ const inviteOrAssignPosition = async (req, res) => {
                 positionId,
                 matchId,
                 used: false,
-            });
+            }); // websitesi.com/link?id={verdigim id}
             return res.status(200).json({ linkId: link._id });
         }
     }

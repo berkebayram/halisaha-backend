@@ -6,6 +6,7 @@ const { getUserRouter } = require('./routes/user_route');
 const { getMatchRouter } = require('./routes/match_route');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
+const { getLinkRouter } = require('./routes/link_route');
 
 
 const startApp = async () => {
@@ -21,6 +22,7 @@ const startApp = async () => {
 
     app.use(getUserRouter());
     app.use(getMatchRouter());
+    app.use(getLinkRouter());
 
     app.listen(config.port, () => {
         console.log(`Server is running on port: ${config.port}`);
