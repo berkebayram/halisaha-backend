@@ -45,7 +45,7 @@ const handleGetLink = async (req, res) => {
     }
 }
 
-const serveApplicationJson = async (res, res) => {
+const serveApplicationJson = async (req, res) => {
     return res.json([[
         {
             "relation": [
